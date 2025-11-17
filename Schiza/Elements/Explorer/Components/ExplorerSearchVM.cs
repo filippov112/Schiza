@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using Schiza.Other;
+﻿using Schiza.Other;
 
-namespace Schiza.Elements.Tree
+namespace Schiza.Elements.Explorer.Components
 {
-    public class TreeSearch : ViewModel
+    public class ExplorerSearchVM : ViewModel
     {
-        private TreeModel? _tree;
-        public TreeModel? Tree
+        private ExplorerTreeVM? _tree;
+        public ExplorerTreeVM? Tree
         {
             get => _tree;
             set
@@ -17,12 +16,12 @@ namespace Schiza.Elements.Tree
         }
         private string _searchText = string.Empty;
 
-        public TreeSearch()
+        public ExplorerSearchVM()
         {
             CheckText = (item) => item?.ToString() ?? string.Empty;
             DisplayText = (item) => item?.ToString() ?? string.Empty;
         }
-        public TreeSearch(Func<TreeElement, string> checkText, Func<TreeElement, string> displayText)
+        public ExplorerSearchVM(Func<ExplorerElementVM, string> checkText, Func<ExplorerElementVM, string> displayText)
         {
             CheckText = checkText;
             DisplayText = displayText;
@@ -74,7 +73,7 @@ namespace Schiza.Elements.Tree
             }
         }
 
-        private void SwitchOnVisibility(TreeElement item)
+        private void SwitchOnVisibility(ExplorerElementVM item)
         {
             item.IsEnabled = true;
             if (item.Parent != null)
@@ -87,7 +86,7 @@ namespace Schiza.Elements.Tree
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Func<TreeElement, string> CheckText;
+        public Func<ExplorerElementVM, string> CheckText;
 
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace Schiza.Elements.Tree
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Func<TreeElement, string> DisplayText;
+        public Func<ExplorerElementVM, string> DisplayText;
 
     }
 }

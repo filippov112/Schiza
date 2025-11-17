@@ -1,13 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
 using Schiza.Other;
 using Schiza.Services;
 
-namespace Schiza.Elements.Tree
+namespace Schiza.Elements.Explorer.Components
 {
     // Базовый класс для элементов дерева
-    public class TreeElement : ViewModel
+    public class ExplorerElementVM : ViewModel
     {
         private bool _isExpanded;
         private bool _isSelected;
@@ -18,10 +16,10 @@ namespace Schiza.Elements.Tree
         public string Name { get; set; } = string.Empty;
         public string FullPath { get; set; } = string.Empty;
         public string Text() => Type == ItemType.Folder ? string.Empty : ContentBuilder.ShouldInclude(FullPath) ? ContentBuilder.ParseFile(FullPath) : string.Empty;
-        public TreeElement? Parent { get; set; } = null;
+        public ExplorerElementVM? Parent { get; set; } = null;
 
 
-        public ObservableCollection<TreeElement> Children { get; set; } = [];
+        public ObservableCollection<ExplorerElementVM> Children { get; set; } = [];
 
         public bool IsExpanded // Каталог раскрыт
         {

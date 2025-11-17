@@ -4,23 +4,22 @@ using System.Windows.Threading;
 using Schiza.Other;
 using Schiza.Services;
 
-namespace Schiza.Elements.Tree
+namespace Schiza.Elements.Explorer.Components
 {
-    public class TreeModel : ViewModel
+    public class ExplorerTreeVM : ViewModel
     {
-        public TreeModel(Dispatcher uiDispatcher)
+        public ExplorerTreeVM(Dispatcher uiDispatcher)
         {
             _uiDispatcher = uiDispatcher;
-            Items = new ObservableCollection<TreeElement>();
+            Items = new ObservableCollection<ExplorerElementVM>();
         }
-        public ObservableCollection<TreeElement> AllItems { get; set; } = [];
-        private ObservableCollection<TreeElement> _items = [];
-        private TreeElement? _selectedItem;
+        public ObservableCollection<ExplorerElementVM> AllItems { get; set; } = [];
+        private ObservableCollection<ExplorerElementVM> _items = [];
+
         private bool skip_all_messagess = false;
         private FileSystemWatcher? _watcher = null;
         private string _watcher_path = string.Empty;
         private Dispatcher? _uiDispatcher = null;
-
 
         private List<string> _expandedPaths = new List<string>();
         private List<string> _selectedPaths = new List<string>();
@@ -86,7 +85,7 @@ namespace Schiza.Elements.Tree
         private void OnFileChanged(object sender, FileSystemEventArgs e) => _uiDispatcher?.Invoke(Refresh);
         private void OnFileRenamed(object sender, RenamedEventArgs e) => _uiDispatcher?.Invoke(Refresh);
 
-        public ObservableCollection<TreeElement> Items
+        public ObservableCollection<ExplorerElementVM> Items
         {
             get => _items;
             set
@@ -125,9 +124,9 @@ namespace Schiza.Elements.Tree
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private TreeElement CreateTreeItem(TreeElement? parent, FileSystemInfo info)
+        private ExplorerElementVM CreateTreeItem(ExplorerElementVM? parent, FileSystemInfo info)
         {
-            var item = new TreeElement
+            var item = new ExplorerElementVM
             {
                 Name = info.Name,
                 FullPath = info.FullName,

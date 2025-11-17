@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:explorer="clr-namespace:Schiza.Elements.Explorer" xmlns:project="clr-namespace:Schiza.Windows.Project" d:DataContext="{d:DesignInstance Type=project:ProjectVM}"
         mc:Ignorable="d"
         Title="Schiza"
         Height="700"
@@ -11,124 +12,56 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition Height="150"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Menu x:Name="Menu"
-                Grid.ColumnSpan="2">
+        <Menu x:Name="Menu" Grid.ColumnSpan="2">
             <MenuItem x:Name="btnOpen"
                     Header="Открыть проект"
-                    Click="OpenProject"/>
+                    Command="{Binding OpenProjectCommand}" Padding="6,4,6,4"/>
             <MenuItem x:Name="btnSettings"
                     Header="Настройки"
-                    Click="OpenSettings"/>
+                    Command="{Binding OpenSettingsCommand}" Padding="6,4,6,4"/>
         </Menu>
-        <Grid x:Name="SearchGrid"
-                Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <TextBox x:Name="SearchTextBox"
-                     Text="{Binding Search.SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalAlignment="Stretch"/>
-        </Grid>
-        <TreeView x:Name="treeExplorer"
-                  Grid.Row="2"
-                  Grid.RowSpan="3"
-                  Grid.ColumnSpan="2"
-                  ItemsSource="{Binding Project.Items}"
-                  Background="#FFF3F3F3"
-                  MouseMove="TreeView_MouseMove"
-                  PreviewMouseLeftButtonDown="TreeView_PreviewMouseLeftButtonDown"
-                  SelectedItemChanged="TreeView_SelectedItemChanged">
-
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded"
-                            Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsFocused, Mode=TwoWay}"/>
-                    <Setter Property="IsEnabled"
-                            Value="{Binding IsEnabled, Mode=TwoWay}"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected"
-                                Value="True">
-                            <Setter Property="Background"
-                                    Value="LightBlue"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>
-
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox x:Name="selected"
-                                IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-                        <Image x:Name="img"
-                                Width="16"
-                                Height="16"
-                                Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Name}"/>
-                    </StackPanel>
-
-                    <HierarchicalDataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Type}"
-                                Value="Folder">
-                            <Setter TargetName="img"
-                                    Property="Source"
-                                    Value="/Resources/folder.png"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Type}"
-                                Value="File">
-                            <Setter TargetName="img"
-                                    Property="Source"
-                                    Value="/Resources/file.png"/>
-                        </DataTrigger>
-                    </HierarchicalDataTemplate.Triggers>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <explorer:ExplorerControl x:Name="explorerControl" DataContext="{Binding Explorer}"
+                ElementSelected="explorerControl_ElementSelected"
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="0"/>
 
         <avalon:TextEditor x:Name="editorAvalon"
                 Grid.Row="1"
-                Grid.Column="2"
-                Grid.ColumnSpan="3"
-                           FontFamily="Consolas"
-                           FontSize="10pt"
-                           ShowLineNumbers="True"
-                           SyntaxHighlighting="Markdown"
-                Grid.RowSpan="2"></avalon:TextEditor>
+                Grid.Column="1"
+                FontFamily="Consolas"
+                FontSize="10pt"
+                ShowLineNumbers="True"
+                SyntaxHighlighting="Markdown"/>
         <TextBox
             x:Name="txtMessage"
-            Grid.Column="2"
+            Grid.Column="1"
             Grid.Row="3"
             TextWrapping="Wrap"
             AllowDrop="True"
             Drop="TextBox_Drop"
             AutoWordSelection="True"
             AcceptsTab="True"
-            AcceptsReturn="True"/>
+            AcceptsReturn="True" Padding="6,4,6,4"/>
         <Button x:Name="btnCopy"
-                Grid.Column="2"
                 Content="Копировать"
-                Grid.Row="4"
-                Click="BuildPrompt"/>
-        <Grid Grid.Column="2"
+                Command="{Binding BuildPromptCommand}"
+                Background="#FF4768FF" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="15,5,15,5" Margin="0,0,10,10" Height="28" Width="97"/>
+        <Grid Grid.Column="1"
                 Grid.Row="3"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom">
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom" Margin="10,0,0,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Content="Примерное число токенов:"/>
             <Label x:Name="lWordCounter"
