@@ -15,6 +15,13 @@ The following features are currently implemented:
 - Preview of the final request after it's built and saved to the clipboard.
 
 ---
+## 🖼 Screenshots
+
+![](Docs/Screen_0.png)
+
+![](Docs/Screen_1.png)
+
+---
 ## ⚙️ Technical info
 .NET 8.0, WPF
 - AvalonEdit 6.3.1.120

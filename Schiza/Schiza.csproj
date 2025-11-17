@@ -19,6 +19,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\Docs\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
     <PackageReference Include="SharpToken" Version="2.0.4" />
     <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
@@ -32,6 +47,10 @@
     <PropertyGroup>
 	    <StartupObject>Schiza.Program</StartupObject>
 	    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+	    <PackageReadmeFile>README.md</PackageReadmeFile>
+	    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	    <PackageIcon>icon.png</PackageIcon>
+	    <Authors>github.com/filippov112</Authors>
     </PropertyGroup>
 
 </Project>
