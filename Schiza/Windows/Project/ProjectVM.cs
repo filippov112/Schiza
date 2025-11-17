@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 using System.Windows.Threading;
-using Youme.Elements.Tree;
-using Youme.Other;
+using Schiza.Elements.Tree;
+using Schiza.Other;
 
-namespace Youme.Windows.Project
+namespace Schiza.Windows.Project
 {
-    public class ProjectVM: ViewModel
+    public class ProjectVM : ViewModel
     {
         private ProjectView view;
-        public ProjectVM(ProjectView window, Dispatcher uiDispatcher) 
+        public ProjectVM(ProjectView window, Dispatcher uiDispatcher)
         {
             view = window;
             Project = new TreeModel(uiDispatcher);

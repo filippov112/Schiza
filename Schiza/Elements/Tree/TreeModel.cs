@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Threading;
-using Youme.Other;
-using Youme.Services;
+using Schiza.Other;
+using Schiza.Services;
 
-namespace Youme.Elements.Tree
+namespace Schiza.Elements.Tree
 {
     public class TreeModel : ViewModel
     {
@@ -20,7 +20,7 @@ namespace Youme.Elements.Tree
         private FileSystemWatcher? _watcher = null;
         private string _watcher_path = string.Empty;
         private Dispatcher? _uiDispatcher = null;
-                          
+
 
         private List<string> _expandedPaths = new List<string>();
         private List<string> _selectedPaths = new List<string>();
@@ -108,7 +108,7 @@ namespace Youme.Elements.Tree
             skip_all_messagess = false;
             AllItems.Clear();
             Items.Clear();
-            
+
             var rootItem = CreateTreeItem(null, new DirectoryInfo(rootPath));
             Items.Add(rootItem);
             RestoreTreeState();

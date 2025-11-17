@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36401.2 d17.14
+VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Youme", "Youme\Youme.csproj", "{9459C3A3-9BD7-48CF-A934-1BB80A4C598A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schiza", "Schiza\Schiza.csproj", "{9459C3A3-9BD7-48CF-A934-1BB80A4C598A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

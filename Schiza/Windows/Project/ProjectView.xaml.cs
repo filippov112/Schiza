@@ -5,10 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Youme.Elements.Tree;
-using Youme.Services;
-using Youme.Windows.Project;
-using Youme.Windows.Settings;
+using Schiza.Elements.Tree;
+using Schiza.Services;
+using Schiza.Windows.Project;
+using Schiza.Windows.Settings;
 using Clipboard = System.Windows.Clipboard;
 using DataFormats = System.Windows.DataFormats;
 using DataObject = System.Windows.DataObject;
@@ -18,7 +18,7 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Windows.Point;
 
 
-namespace Youme.Windows.Project
+namespace Schiza.Windows.Project
 {
     public partial class ProjectView : Window
     {
@@ -179,7 +179,7 @@ namespace Youme.Windows.Project
 
                         // Формируем текстовые данные для перемещения
                         DataObject data = new DataObject(DataFormats.Text, Path.GetRelativePath(Program.Storage.ProjectFolder, item.FullPath));
-                        
+
                         if (!_isDragging)
                         {
                             _isDragging = true;

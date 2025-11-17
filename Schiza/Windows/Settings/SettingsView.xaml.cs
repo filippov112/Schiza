@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Youme.Windows.Settings
+namespace Schiza.Windows.Settings
 {
     /// <summary>
     /// Логика взаимодействия для Settings.xaml

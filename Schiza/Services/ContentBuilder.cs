@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using Ude;
 
-namespace Youme.Services;
+namespace Schiza.Services;
 
 public static class ContentBuilder
 {

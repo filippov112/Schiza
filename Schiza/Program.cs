@@ -1,8 +1,8 @@
 ﻿
 using System.Text;
-using Youme.Services;
+using Schiza.Services;
 
-namespace Youme
+namespace Schiza
 {
     public class Program
     {

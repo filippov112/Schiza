@@ -1,7 +1,7 @@
-﻿<Application x:Class="Youme.App"
+﻿<Application x:Class="Schiza.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Youme"
+             xmlns:local="clr-namespace:Schiza"
              StartupUri="Windows/Project/ProjectView.xaml">
     <Application.Resources>
 

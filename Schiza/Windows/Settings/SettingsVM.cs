@@ -1,10 +1,10 @@
-﻿using Youme.Model;
-using Youme.Other;
-using Youme.Services;
+﻿using Schiza.Model;
+using Schiza.Other;
+using Schiza.Services;
 
-namespace Youme.Windows.Settings
+namespace Schiza.Windows.Settings
 {
-    public class SettingsVM:ViewModel
+    public class SettingsVM : ViewModel
     {
         private SettingsView? view;
         public SettingsVM(SettingsView view)
@@ -20,7 +20,7 @@ namespace Youme.Windows.Settings
         public string InputProjectPrompt
         {
             get => LocalConfig.InputProjectPrompt;
-            set 
+            set
             {
                 if (LocalConfig.InputProjectPrompt != value)
                     BtnSaveIsActive = true;
@@ -32,7 +32,7 @@ namespace Youme.Windows.Settings
         public string StructurePromptLocal
         {
             get => LocalConfig.StructurePromptLocal;
-            set 
+            set
             {
                 if (LocalConfig.StructurePromptLocal != value)
                     BtnSaveIsActive = true;
@@ -44,7 +44,7 @@ namespace Youme.Windows.Settings
         public string StructurePromptGlobal
         {
             get => GlobalConfig.StructurePromptGlobal;
-            set 
+            set
             {
                 if (GlobalConfig.StructurePromptGlobal != value)
                     BtnSaveIsActive = true;
@@ -56,7 +56,7 @@ namespace Youme.Windows.Settings
         public string UserSettingsPrompt
         {
             get => GlobalConfig.UserSettingsPrompt;
-            set 
+            set
             {
                 if (GlobalConfig.UserSettingsPrompt != value)
                     BtnSaveIsActive = true;
@@ -68,7 +68,7 @@ namespace Youme.Windows.Settings
         public string StyleFileBlock
         {
             get => GlobalConfig.StyleFileBlock;
-            set 
+            set
             {
                 if (GlobalConfig.StyleFileBlock != value)
                     BtnSaveIsActive = true;
@@ -81,8 +81,9 @@ namespace Youme.Windows.Settings
 
         private bool _btnSaveIsActive = false;
 
-        public bool BtnSaveIsActive { 
-            get => _btnSaveIsActive; 
+        public bool BtnSaveIsActive
+        {
+            get => _btnSaveIsActive;
             set
             {
                 _btnSaveIsActive = value;

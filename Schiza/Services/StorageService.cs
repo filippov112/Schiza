@@ -1,45 +1,45 @@
 using System.Text;
-using Youme.Model;
+using Schiza.Model;
 
-namespace Youme.Services;
+namespace Schiza.Services;
 
 public class StorageService
 {
     #region Constants
     /// <summary>
-    /// Относительный маршрут настроек программы
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string GlobalConfigPath = "./config/global_config.json";
     /// <summary>
-    /// Файл настроек проекта
+    /// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string LocalConfigFileName = "local_config.json";
     /// <summary>
-    /// Каталог служебных файлов проекта
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
-    public const string LocalConfigFolder = ".youme";
+    public const string LocalConfigFolder = ".Schiza";
     /// <summary>
-    /// - ###input### - вводная часть
+    /// - ###input### - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string KEY_WORD_INPUT = "###input###";
     /// <summary>
-    /// - ###project### - структура проекта
+    /// - ###project### - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string KEY_WORD_PROJECT = "###project###";
     /// <summary>
-    /// - ###settings### - пользовательские настройки 
+    /// - ###settings### - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
     /// </summary>
-    public const string KEY_WORD_SETTINGS = "###settings###";                                 
+    public const string KEY_WORD_SETTINGS = "###settings###";
     /// <summary>
-    /// - ###request### - запрос пользователя
+    /// - ###request### - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string KEY_WORD_REQUEST = "###request###";
     /// <summary>
-    /// - ###path### - относительный путь к файлу
+    /// - ###path### - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string KEY_WORD_PATH = "###path###";
     /// <summary>
-    /// - ###content### - содержание файла
+    /// - ###content### - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public const string KEY_WORD_CONTENT = "###content###";
     #endregion
@@ -70,20 +70,20 @@ public class StorageService
             cs.SaveLocalConfig(ProjectFolder);
     }
 
-    
-    // Методы обработки текста
+
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
     /// <summary>
-    /// Финальное оформление промпта с учетом структуры проекта, пользовательских настроек и запроса пользователя
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
-    /// <param name="projectStructure">Содержание проекта</param>
-    /// <param name="userRequest">Пользовательский запрос</param>
+    /// <param name="projectStructure">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ</param>
+    /// <param name="userRequest">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ</param>
     /// <returns></returns>
     public string GetPrompt(string projectStructure, string userRequest)
     {
-        // Если не задан локальный промпт структуры, используем глобальный
+        // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         string result = string.IsNullOrWhiteSpace(cs.LC.StructurePromptLocal) ? cs.GC.StructurePromptGlobal : cs.LC.StructurePromptLocal;
-        
+
         result = result.Replace(KEY_WORD_INPUT, cs.LC.InputProjectPrompt);
         result = result.Replace(KEY_WORD_PROJECT, projectStructure);
         result = result.Replace(KEY_WORD_SETTINGS, cs.GC.UserSettingsPrompt);
@@ -92,10 +92,10 @@ public class StorageService
     }
 
     /// <summary>
-    /// Оформление блока файла для передачи в промпт
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
-    /// <param name="relativePath">Путь к файлу</param>
-    /// <param name="fileContent">Содержание</param>
+    /// <param name="relativePath">пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ</param>
+    /// <param name="fileContent">пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</param>
     /// <returns></returns>
     public void AddFile(StringBuilder sb, string relativePath, string fileContent)
     {

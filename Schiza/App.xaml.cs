@@ -1,6 +1,6 @@
 ﻿using Application = System.Windows.Application;
 
-namespace Youme
+namespace Schiza
 {
     /// <summary>
     /// Interaction logic for App.xaml

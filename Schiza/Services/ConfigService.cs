@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
-using Youme.Model;
+using Schiza.Model;
 
-namespace Youme.Services
+namespace Schiza.Services
 {
     public class ConfigService
     {
-        public ConfigService(string globalConfigPath, string localConfigFileName, string localConfigFolder) 
+        public ConfigService(string globalConfigPath, string localConfigFileName, string localConfigFolder)
         {
             GlobalConfigPath = globalConfigPath;
             LocalConfigFileName = localConfigFileName;
@@ -31,7 +31,7 @@ namespace Youme.Services
         /// <summary>
         /// Каталог служебных файлов проекта
         /// </summary>
-        private string LocalConfigFolder = ".youme";
+        private string LocalConfigFolder = ".Schiza";
 
         public GlobalConfig GC { get; set; } = new(); // Общие настройки приложения
         public LocalConfig LC { get; set; } = new(); // Настройки проекта

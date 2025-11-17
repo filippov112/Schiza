@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Youme.Other;
+using Schiza.Other;
 
-namespace Youme.Elements.Tree
+namespace Schiza.Elements.Tree
 {
     public class TreeSearch : ViewModel
     {
@@ -51,7 +51,7 @@ namespace Youme.Elements.Tree
                 return;
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
-                foreach(var item in _tree.AllItems)
+                foreach (var item in _tree.AllItems)
                 {
                     if (CheckText(item).IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0)
                         item.IsEnabled = true;
@@ -59,7 +59,7 @@ namespace Youme.Elements.Tree
                         item.IsEnabled = false;
                 }
 
-                foreach(var item in _tree.AllItems.Where(i => i.IsEnabled))
+                foreach (var item in _tree.AllItems.Where(i => i.IsEnabled))
                 {
                     if (item.Parent != null)
                         SwitchOnVisibility(item.Parent);
@@ -67,7 +67,7 @@ namespace Youme.Elements.Tree
             }
             else
             {
-                foreach(var item in _tree.AllItems)
+                foreach (var item in _tree.AllItems)
                 {
                     item.IsEnabled = true;
                 }

@@ -30,7 +30,7 @@
   </ItemGroup>
 
     <PropertyGroup>
-	    <StartupObject>Youme.Program</StartupObject>
+	    <StartupObject>Schiza.Program</StartupObject>
 	    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     </PropertyGroup>
 

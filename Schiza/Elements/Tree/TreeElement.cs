@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-using Youme.Other;
-using Youme.Services;
+using Schiza.Other;
+using Schiza.Services;
 
-namespace Youme.Elements.Tree
+namespace Schiza.Elements.Tree
 {
     // Базовый класс для элементов дерева
     public class TreeElement : ViewModel
@@ -20,7 +20,7 @@ namespace Youme.Elements.Tree
         public string Text() => Type == ItemType.Folder ? string.Empty : ContentBuilder.ShouldInclude(FullPath) ? ContentBuilder.ParseFile(FullPath) : string.Empty;
         public TreeElement? Parent { get; set; } = null;
 
-        
+
         public ObservableCollection<TreeElement> Children { get; set; } = [];
 
         public bool IsExpanded // Каталог раскрыт
@@ -38,7 +38,7 @@ namespace Youme.Elements.Tree
             set
             {
                 _isSelected = value;
-                foreach(var item in Children.Where(item => item.IsEnabled))
+                foreach (var item in Children.Where(item => item.IsEnabled))
                     item.IsSelected = value;
                 OnPropertyChanged();
             }

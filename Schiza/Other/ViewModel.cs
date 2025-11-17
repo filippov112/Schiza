@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Youme.Other
+namespace Schiza.Other
 {
     public class ViewModel : INotifyPropertyChanged
     {
