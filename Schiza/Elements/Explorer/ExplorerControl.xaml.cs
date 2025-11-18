@@ -9,6 +9,7 @@ using DataObject = System.Windows.DataObject;
 using DragDropEffects = System.Windows.DragDropEffects;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Windows.Point;
+using TreeView = System.Windows.Controls.TreeView;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Schiza.Elements.Explorer
@@ -41,6 +42,50 @@ namespace Schiza.Elements.Explorer
                     return;
                 ElementSelected?.Invoke(this, item);
             }
+        }
+
+        // Добавим метод для выбора элемента под курсором
+        private void SelectItemUnderMouse(object sender, MouseButtonEventArgs e)
+        {
+            var treeView = (TreeView)sender;
+            var element = e.OriginalSource as DependencyObject;
+            // Ищем TreeViewItem, на котором произошло событие
+            while (element != null && element != treeView)
+            {
+                if (element is TreeViewItem item)
+                {
+                    // Устанавливаем фокус и выделяем элемент
+                    item.Focus();
+                    // Устанавливаем IsSelected в true, что вызовет обновление связанного свойства IsFocused
+                    if (item.DataContext is ExplorerElementVM vm)
+                    {
+                        // Снимаем выделение (IsFocused) со всех элементов, кроме текущего
+                        // Это может быть не нужно, если стандартное поведение WPF при установке IsSelected
+                        // само управляет выделением. Проверим сначала, нужно ли это.
+                        // Достаточно установить IsSelected, и стиль в XAML сработает.
+                        // Но чтобы убедиться, что IsFocused установлен, можно явно снять с других.
+                        // Однако, проще полагаться на стандартное поведение TreeView и IsSelected.
+                        // В ViewModel IsSelected при установке в true, устанавливает IsFocused.
+                        // Поэтому установка IsSelected должна быть достаточной.
+                        if (!item.IsSelected)
+                        {
+                            item.IsSelected = true;
+                        }
+                        // e.Handled = true; // Опционально: может помешать другим обработчикам
+                        break; // Нашли и обработали, выходим
+                    }
+                }
+                element = VisualTreeHelper.GetParent(element);
+            }
+        }
+
+        // Обработчик для PreviewMouseRightButtonDown
+        private void TreeView_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            SelectItemUnderMouse(sender, e);
+            // Важно: Не вызываем e.Handled = true;, если хотим, чтобы контекстное меню открылось нормально.
+            // SelectItemUnderMouse устанавливает IsSelected, что приведет к установке IsFocused через привязку.
+            // Это должно быть достаточным для корректного отображения выделения.
         }
 
         #region Перенос элементов дерева в промпт
@@ -110,8 +155,4 @@ namespace Schiza.Elements.Explorer
         }
         #endregion
     }
-
-
-
-
 }

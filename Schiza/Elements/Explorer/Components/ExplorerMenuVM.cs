@@ -30,22 +30,30 @@ namespace Schiza.Elements.Explorer.Components
         public ICommand ExcludeCommand { get; }
         public ICommand RenameCommand { get; }
 
-        private void CreateFile(ExplorerElementVM parentItem)
+        private void CreateFile(ExplorerElementVM? selectedItem)
         {
-            if (parentItem == null || parentItem.Type != ItemType.Folder)
+            // Определяем родительский каталог, в котором нужно создать файл
+            ExplorerElementVM? targetParent = selectedItem switch
             {
-                // Пытаемся создать в корне проекта, если родитель не папка
-                parentItem = _project?.Items?.FirstOrDefault();
-                if (parentItem?.Type != ItemType.Folder) return;
+                null => _project?.Items?.FirstOrDefault(i => i.Type == ItemType.Folder), // Корень проекта
+                { Type: ItemType.Folder } => selectedItem,                             // Выбранная папка
+                { Type: ItemType.File, Parent: { } parent } => parent,                 // Родитель файла
+                _ => null
+            };
+
+            if (targetParent?.Type != ItemType.Folder)
+            {
+                MessageBox.Show("Не удалось определить каталог для создания файла.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
             var fileName = Microsoft.VisualBasic.Interaction.InputBox("Введите имя файла:", "Создать файл", "newfile.txt");
             if (string.IsNullOrWhiteSpace(fileName)) return;
 
-            var fullPath = Path.Combine(parentItem.FullPath, fileName);
+            var fullPath = Path.Combine(targetParent.FullPath, fileName);
             if (File.Exists(fullPath) || Directory.Exists(fullPath))
             {
-                MessageBox.Show("Файл или каталог с таким именем уже существует.");
+                MessageBox.Show("Файл или каталог с таким именем уже существует.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -56,25 +64,34 @@ namespace Schiza.Elements.Explorer.Components
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при создании файла: {ex.Message}");
+                MessageBox.Show($"Ошибка при создании файла: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void CreateFolder(ExplorerElementVM parentItem)
+        private void CreateFolder(ExplorerElementVM? selectedItem)
         {
-            if (parentItem == null || parentItem.Type != ItemType.Folder)
+            // Определяем родительский каталог, в котором нужно создать папку
+            ExplorerElementVM? targetParent = selectedItem switch
             {
-                parentItem = _project?.Items?.FirstOrDefault();
-                if (parentItem?.Type != ItemType.Folder) return;
+                null => _project?.Items?.FirstOrDefault(i => i.Type == ItemType.Folder), // Корень проекта
+                { Type: ItemType.Folder } => selectedItem,                             // Выбранная папка
+                { Type: ItemType.File, Parent: { } parent } => parent,                 // Родитель файла
+                _ => null
+            };
+
+            if (targetParent?.Type != ItemType.Folder)
+            {
+                MessageBox.Show("Не удалось определить каталог для создания папки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
             var folderName = Microsoft.VisualBasic.Interaction.InputBox("Введите имя каталога:", "Создать каталог", "NewFolder");
             if (string.IsNullOrWhiteSpace(folderName)) return;
 
-            var fullPath = Path.Combine(parentItem.FullPath, folderName);
+            var fullPath = Path.Combine(targetParent.FullPath, folderName);
             if (File.Exists(fullPath) || Directory.Exists(fullPath))
             {
-                MessageBox.Show("Файл или каталог с таким именем уже существует.");
+                MessageBox.Show("Файл или каталог с таким именем уже существует.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -85,7 +102,7 @@ namespace Schiza.Elements.Explorer.Components
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при создании каталога: {ex.Message}");
+                MessageBox.Show($"Ошибка при создании каталога: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="SharpToken" Version="2.0.4" />
     <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>

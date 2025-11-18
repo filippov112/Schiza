@@ -14,12 +14,14 @@
         <TextBox x:Name="SearchTextBox"
              Text="{Binding Search.SearchText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4,6,4"/>
         <TreeView x:Name="treeExplorer"
-          Grid.Row="1"
-          ItemsSource="{Binding Project.Items}"
-          Background="#FFF3F3F3"
-          MouseMove="TreeView_MouseMove"
-          PreviewMouseLeftButtonDown="TreeView_PreviewMouseLeftButtonDown"
-          SelectedItemChanged="TreeView_SelectedItemChanged" Padding="6,6,6,6">
+              Grid.Row="1"
+              ItemsSource="{Binding Project.Items}"
+              Background="#FFF3F3F3"
+              MouseMove="TreeView_MouseMove"
+              PreviewMouseLeftButtonDown="TreeView_PreviewMouseLeftButtonDown"
+              SelectedItemChanged="TreeView_SelectedItemChanged" 
+              PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown"
+              Padding="6,6,6,6">
             <TreeView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Создать файл" Command="{Binding ExplorerContextMenu.CreateFileCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>

@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit"
-        xmlns:explorer="clr-namespace:Schiza.Elements.Explorer" xmlns:project="clr-namespace:Schiza.Windows.Project" d:DataContext="{d:DesignInstance Type=project:ProjectVM}"
+        xmlns:explorer="clr-namespace:Schiza.Elements.Explorer" 
+        xmlns:project="clr-namespace:Schiza.Windows.Project" 
+        d:DataContext="{d:DesignInstance Type=project:ProjectVM}"
+        xmlns:ad="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
         Title="Schiza"
         Height="700"
@@ -13,13 +16,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Menu x:Name="Menu" Grid.ColumnSpan="2">
+        <Menu x:Name="Menu">
             <MenuItem x:Name="btnOpen"
                     Header="Открыть проект"
                     Command="{Binding OpenProjectCommand}" Padding="6,4,6,4"/>
@@ -27,46 +25,90 @@
                     Header="Настройки"
                     Command="{Binding OpenSettingsCommand}" Padding="6,4,6,4"/>
         </Menu>
+        <ad:DockingManager x:Name="DockManager" Grid.Row="1" Margin="6,0,6,6">
+            <ad:LayoutRoot>
+                <ad:LayoutPanel Orientation="Horizontal">
+                    
+                    <!-- Левая панель -->
+                    <ad:LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="280">
 
-        <explorer:ExplorerControl x:Name="explorerControl" DataContext="{Binding Explorer}"
-                ElementSelected="explorerControl_ElementSelected"
-                Grid.Row="1"
-                Grid.RowSpan="2"
-                Grid.Column="0"/>
+                        <!-- Проводник -->
+                        <ad:LayoutAnchorablePane x:Name="LeftTopPanel" DockHeight="3*">
+                            <ad:LayoutAnchorable Title="Проводник" CanClose="False" CanFloat="False">
+                                <Grid>
+                                    <explorer:ExplorerControl 
+                                            x:Name="explorerControl" 
+                                            DataContext="{Binding Explorer}"
+                                            ElementSelected="explorerControl_ElementSelected"/>
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorablePane>
 
-        <avalon:TextEditor x:Name="editorAvalon"
-                Grid.Row="1"
-                Grid.Column="1"
-                FontFamily="Consolas"
-                FontSize="10pt"
-                ShowLineNumbers="True"
-                SyntaxHighlighting="Markdown"/>
-        <TextBox
-            x:Name="txtMessage"
-            Grid.Column="1"
-            Grid.Row="3"
-            TextWrapping="Wrap"
-            AllowDrop="True"
-            Drop="TextBox_Drop"
-            AutoWordSelection="True"
-            AcceptsTab="True"
-            AcceptsReturn="True" Padding="6,4,6,4"/>
-        <Button x:Name="btnCopy"
-                Content="Копировать"
-                Command="{Binding BuildPromptCommand}"
-                Background="#FF4768FF" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="15,5,15,5" Margin="0,0,10,10" Height="28" Width="97"/>
-        <Grid Grid.Column="1"
-                Grid.Row="3"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom" Margin="10,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="170"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="Примерное число токенов:"/>
-            <Label x:Name="lWordCounter"
-                    Content="0"
-                    Grid.Column="1"/>
-        </Grid>
+                        <!-- Закладки -->
+                        <ad:LayoutAnchorablePane x:Name="LeftBottomPanel">
+                            <ad:LayoutAnchorable Title="Закладки" CanClose="False" CanFloat="False" >
+                                <Grid>
+
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorablePane>
+
+                    </ad:LayoutAnchorablePaneGroup>
+                    
+
+                    <!-- Центральная область -->
+                    <ad:LayoutPanel Orientation="Vertical" DockWidth="*">
+
+                        <!-- Область просмотра/редактирования -->
+                        <ad:LayoutDocumentPane x:Name="DocumentPanel">
+                            <ad:LayoutDocument Title="Документ" CanClose="False" CanFloat="False">
+                                <Grid>
+                                    <avalon:TextEditor x:Name="editorAvalon"
+                                        FontFamily="Consolas"
+                                        FontSize="10pt"
+                                        ShowLineNumbers="True"
+                                        SyntaxHighlighting="Markdown"/>
+                                </Grid>
+                            </ad:LayoutDocument>
+                        </ad:LayoutDocumentPane>
+
+                        <!-- Область ввода запроса -->
+                        <ad:LayoutAnchorablePane x:Name="FooterPanel" DockHeight="140">
+                            <ad:LayoutAnchorable Title="Запрос" CanClose="False" CanFloat="False">
+                                <Grid>
+                                    <TextBox
+                                        x:Name="txtMessage"
+                                        TextWrapping="Wrap"
+                                        AllowDrop="True"
+                                        Drop="TextBox_Drop"
+                                        AutoWordSelection="True"
+                                        AcceptsTab="True"
+                                        AcceptsReturn="True" 
+                                        Padding="6,4,6,4"/>
+                                    <Button x:Name="btnCopy"
+                                        Content="Копировать"
+                                        Command="{Binding BuildPromptCommand}"
+                                        Background="#FF4768FF" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="15,5,15,5" Margin="0,0,10,10" Height="28" Width="97"/>
+                                    <Grid
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Bottom" Margin="10,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="170"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="Примерное число токенов:"/>
+                                        <Label x:Name="lWordCounter"
+                                            Content="0"
+                                            Grid.Column="1"/>
+                                    </Grid>
+                                </Grid>
+                            </ad:LayoutAnchorable>
+                        </ad:LayoutAnchorablePane>
+
+                    </ad:LayoutPanel>
+                </ad:LayoutPanel>
+            </ad:LayoutRoot>
+        </ad:DockingManager>
+        
     </Grid>
 </Window>
