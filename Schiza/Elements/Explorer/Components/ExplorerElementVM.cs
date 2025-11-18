@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using Schiza.Other;
 using Schiza.Services;
 
@@ -57,6 +58,19 @@ namespace Schiza.Elements.Explorer.Components
             {
                 _isEnabled = value;
                 OnPropertyChanged();
+            }
+        }
+
+        // Метод для обновления пути элемента и его потомков
+        public void UpdatePath(string newParentPath)
+        {
+            FullPath = Path.Combine(newParentPath, Name);
+            if (Type == ItemType.Folder)
+            {
+                foreach (var child in Children)
+                {
+                    child.UpdatePath(FullPath);
+                }
             }
         }
     }

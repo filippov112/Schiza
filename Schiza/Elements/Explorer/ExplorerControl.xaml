@@ -1,50 +1,69 @@
 ﻿<UserControl x:Class="Schiza.Elements.Explorer.ExplorerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Schiza.Elements.Explorer"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+        d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox"
-             Text="{Binding Search.SearchText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4,6,4"/>
+                 Text="{Binding Search.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                Padding="6,4,6,4"/>
         <TreeView x:Name="treeExplorer"
-              Grid.Row="1"
-              ItemsSource="{Binding Project.Items}"
-              Background="#FFF3F3F3"
-              MouseMove="TreeView_MouseMove"
-              PreviewMouseLeftButtonDown="TreeView_PreviewMouseLeftButtonDown"
-              SelectedItemChanged="TreeView_SelectedItemChanged" 
-              PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown"
-              Padding="6,6,6,6">
+                  Grid.Row="1"
+                  ItemsSource="{Binding Project.Items}"
+                  Background="#FFF3F3F3"
+                  MouseMove="TreeView_MouseMove"
+                  PreviewMouseLeftButtonDown="TreeView_PreviewMouseLeftButtonDown"
+                  SelectedItemChanged="TreeView_SelectedItemChanged"
+                  PreviewMouseRightButtonDown="TreeView_PreviewMouseRightButtonDown"
+                  Padding="6,6,6,6"
+                  AllowDrop="True"
+                  DragOver="TreeView_DragOver"
+                  Drop="TreeView_Drop">
+
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Создать файл" Command="{Binding ExplorerContextMenu.CreateFileCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                    <MenuItem Header="Создать каталог" Command="{Binding ExplorerContextMenu.CreateFolderCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                    <MenuItem Header="Удалить" Command="{Binding ExplorerContextMenu.DeleteCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                    <MenuItem Header="Исключить из проекта" Command="{Binding ExplorerContextMenu.ExcludeCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                    <MenuItem Header="Переименовать" Command="{Binding ExplorerContextMenu.RenameCommand}" CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Создать файл"
+                            Command="{Binding ExplorerContextMenu.CreateFileCommand}"
+                            CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Создать каталог"
+                            Command="{Binding ExplorerContextMenu.CreateFolderCommand}"
+                            CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Удалить"
+                            Command="{Binding ExplorerContextMenu.DeleteCommand}"
+                            CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Исключить из проекта"
+                            Command="{Binding ExplorerContextMenu.ExcludeCommand}"
+                            CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                    <MenuItem Header="Переименовать"
+                            Command="{Binding ExplorerContextMenu.RenameCommand}"
+                            CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
 
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded"
-                    Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                            Value="{Binding IsExpanded, Mode=TwoWay}"/>
                     <Setter Property="IsSelected"
-                    Value="{Binding IsFocused, Mode=TwoWay}"/>
+                            Value="{Binding IsFocused, Mode=TwoWay}"/>
                     <Setter Property="IsEnabled"
-                    Value="{Binding IsEnabled, Mode=TwoWay}"/>
+                            Value="{Binding IsEnabled, Mode=TwoWay}"/>
+                    <Setter Property="AllowDrop"
+                            Value="True"/>
+                    <!-- Добавлено для поддержки Drop на уровне элемента -->
                     <Style.Triggers>
                         <Trigger Property="IsSelected"
-                        Value="True">
+                                 Value="True">
                             <Setter Property="Background"
-                            Value="LightBlue"/>
+                                    Value="LightBlue"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -54,26 +73,26 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="selected"
-                        IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                         <Image x:Name="img"
-                        Width="16"
-                        Height="16"
-                        Margin="0,0,5,0"/>
+                               Width="16"
+                               Height="16"
+                               Margin="0,0,5,0"/>
                         <TextBlock Text="{Binding Name}"/>
                     </StackPanel>
 
                     <HierarchicalDataTemplate.Triggers>
                         <DataTrigger Binding="{Binding Type}"
-                        Value="Folder">
+                                     Value="Folder">
                             <Setter TargetName="img"
-                            Property="Source"
-                            Value="/Resources/folder.png"/>
+                                    Property="Source"
+                                    Value="/Resources/folder.png"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Type}"
-                        Value="File">
+                                     Value="File">
                             <Setter TargetName="img"
-                            Property="Source"
-                            Value="/Resources/file.png"/>
+                                    Property="Source"
+                                    Value="/Resources/file.png"/>
                         </DataTrigger>
                     </HierarchicalDataTemplate.Triggers>
                 </HierarchicalDataTemplate>

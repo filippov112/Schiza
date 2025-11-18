@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Threading;
 using Schiza.Other;
@@ -24,8 +25,13 @@ namespace Schiza.Elements.Explorer.Components
         private List<string> _expandedPaths = new List<string>();
         private List<string> _selectedPaths = new List<string>();
 
+        // Флаг для предотвращения перекрытия Refresh
+        private bool _isRefreshing = false;
+
         private void SaveTreeState()
         {
+            // Проверяем, инициализирован ли _uiDispatcher и вызываем из UI-потока, если нужно
+            // Но в текущем контексте LoadProject вызывается из UI-потока, так что это безопасно
             _expandedPaths.Clear();
             _selectedPaths.Clear();
             foreach (var item in AllItems)
@@ -51,9 +57,33 @@ namespace Schiza.Elements.Explorer.Components
         /// </summary>
         public void Refresh()
         {
-            StartWatching(Program.Storage.ProjectFolder);
-            LoadProject(Program.Storage.ProjectFolder);
+            if (_isRefreshing)
+            {
+                // Если Refresh уже выполняется, откладываем новый вызов
+                // Это предотвращает ошибки при быстрых изменениях
+                _uiDispatcher?.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    // Повторная проверка внутри вызова диспетчера
+                    if (!_isRefreshing)
+                    {
+                        Refresh();
+                    }
+                }));
+                return;
+            }
+
+            _isRefreshing = true; // Устанавливаем флаг
+            try
+            {
+                StartWatching(Program.Storage.ProjectFolder);
+                LoadProject(Program.Storage.ProjectFolder);
+            }
+            finally
+            {
+                _isRefreshing = false; // Сбрасываем флаг в любом случае
+            }
         }
+
         /// <summary>
         /// Синхронизация изменений в файловой системе
         /// </summary>
@@ -70,20 +100,24 @@ namespace Schiza.Elements.Explorer.Components
                     _watcher.EnableRaisingEvents = false;
                     _watcher.Created -= OnFileChanged;
                     _watcher.Deleted -= OnFileChanged;
-                    _watcher.Renamed -= OnFileRenamed;
+                    _watcher.Renamed -= OnFileChanged;
                     _watcher.Dispose();
                 }
                 _watcher = new FileSystemWatcher(path);
                 _watcher.IncludeSubdirectories = true;
                 _watcher.Created += OnFileChanged;
                 _watcher.Deleted += OnFileChanged;
-                _watcher.Renamed += OnFileRenamed;
+                _watcher.Renamed += OnFileChanged;
                 _watcher.EnableRaisingEvents = true;
             }
         }
 
-        private void OnFileChanged(object sender, FileSystemEventArgs e) => _uiDispatcher?.Invoke(Refresh);
-        private void OnFileRenamed(object sender, RenamedEventArgs e) => _uiDispatcher?.Invoke(Refresh);
+        // Обработчик событий файловой системы
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            // Всегда вызываем Refresh через Dispatcher, чтобы он выполнялся в UI-потоке
+            _uiDispatcher?.BeginInvoke(DispatcherPriority.Background, new Action(Refresh));
+        }
 
         public ObservableCollection<ExplorerElementVM> Items
         {
@@ -101,17 +135,25 @@ namespace Schiza.Elements.Explorer.Components
         /// <param name="rootPath"></param>
         public void LoadProject(string rootPath)
         {
+            // Убедимся, что метод вызывается из UI-потока
+            if (_uiDispatcher != null && !_uiDispatcher.CheckAccess())
+            {
+                _uiDispatcher.Invoke(DispatcherPriority.Normal, new Action(() => LoadProject(rootPath)));
+                return;
+            }
+
             if (rootPath == string.Empty || !Directory.Exists(rootPath))
                 return;
+
             SaveTreeState();
             skip_all_messagess = false;
-            AllItems.Clear();
-            Items.Clear();
+            AllItems.Clear(); // Очищаем коллекцию в UI-потоке
+            Items.Clear();    // Очищаем коллекцию в UI-потоке
 
             var rootItem = CreateTreeItem(null, new DirectoryInfo(rootPath));
             Items.Add(rootItem);
             RestoreTreeState();
-            OnPropertyChanged();
+            OnPropertyChanged(); // Уведомляем, что Items изменились
         }
 
         /// <summary>
@@ -172,5 +214,76 @@ namespace Schiza.Elements.Explorer.Components
 
             return item;
         }
+
+        // Метод для перемещения элемента в файловой системе
+        public bool MoveItem(ExplorerElementVM itemToMove, ExplorerElementVM newParent)
+        {
+            if (itemToMove == null || newParent == null || newParent.Type != ItemType.Folder)
+                return false;
+
+            if (itemToMove.Parent == newParent)
+                return true; // Уже в нужной папке
+
+            string sourcePath = itemToMove.FullPath;
+            string destinationPath = Path.Combine(newParent.FullPath, itemToMove.Name);
+
+            // нельзя перемещать элемент в самого себя
+            if (string.Equals(sourcePath, destinationPath, StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.WriteLine($"нельзя перемещать элемент в самого себя: source = `{sourcePath}`, dest = `{destinationPath}`");
+                return false;
+            }
+
+            // нельзя перемещать родителя в его потомка
+            if (IsChildPath(sourcePath, destinationPath))
+            {
+                Debug.WriteLine($"нельзя перемещать родителя в его потомка: source = `{sourcePath}`, dest = `{destinationPath}`");
+                return false;
+            }
+
+
+            // Проверка на существование файла/папки с таким именем в новом месте
+            if (File.Exists(destinationPath) || Directory.Exists(destinationPath))
+            {
+                MessageBox.Show($"Файл или папка с именем '{itemToMove.Name}' уже существует в папке '{newParent.Name}'.", "Ошибка перемещения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            try
+            {
+                if (itemToMove.Type == ItemType.Folder)
+                {
+                    Directory.Move(sourcePath, destinationPath);
+                }
+                else
+                {
+                    File.Move(sourcePath, destinationPath);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при перемещении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        // Вспомогательный метод для проверки, является ли 'parent' родительским для 'child'
+        private bool IsChildPath(string parent, string child)
+        {
+            var parentInfo = new DirectoryInfo(parent);
+            var childInfo = new DirectoryInfo(child);
+
+            while (childInfo.Parent != null)
+            {
+                if (childInfo.Parent.FullName.Equals(parentInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                childInfo = childInfo.Parent;
+            }
+
+            return false;
+        }
+
     }
 }

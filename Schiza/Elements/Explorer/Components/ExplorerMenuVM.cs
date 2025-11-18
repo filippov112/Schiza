@@ -60,7 +60,6 @@ namespace Schiza.Elements.Explorer.Components
             try
             {
                 File.WriteAllText(fullPath, string.Empty);
-                _project?.Refresh(); // Перезагрузка дерева
             }
             catch (Exception ex)
             {
@@ -98,7 +97,6 @@ namespace Schiza.Elements.Explorer.Components
             try
             {
                 Directory.CreateDirectory(fullPath);
-                _project?.Refresh();
             }
             catch (Exception ex)
             {
@@ -126,7 +124,6 @@ namespace Schiza.Elements.Explorer.Components
                 {
                     File.Delete(item.FullPath);
                 }
-                _project?.Refresh();
             }
             catch (Exception ex)
             {
@@ -178,27 +175,10 @@ namespace Schiza.Elements.Explorer.Components
                 {
                     File.Move(item.FullPath, newFullPath);
                 }
-                // Обновляем свойства элемента
-                item.Name = newName;
-                item.FullPath = newFullPath;
-                // Обновляем FullPath для всех детей
-                UpdateChildrenPaths(item);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при переименовании: {ex.Message}");
-            }
-        }
-
-        private void UpdateChildrenPaths(ExplorerElementVM parent)
-        {
-            foreach (var child in parent.Children)
-            {
-                child.FullPath = Path.Combine(parent.FullPath, child.Name);
-                if (child.Type == ItemType.Folder)
-                {
-                    UpdateChildrenPaths(child); // Рекурсивно для вложенных
-                }
             }
         }
     }
