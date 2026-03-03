@@ -1,7 +1,7 @@
-﻿using Schiza.Elements.Explorer;
-using Schiza.Elements.Explorer.Components;
-using Schiza.Other;
+﻿using Schiza.Other;
 using Schiza.Services;
+using Schiza.Windows.Project.Explorer;
+using Schiza.Windows.Project.Explorer.Components;
 using Schiza.Windows.Settings;
 using SharpToken;
 using System.IO;

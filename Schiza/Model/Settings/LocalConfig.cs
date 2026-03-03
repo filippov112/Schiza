@@ -1,4 +1,4 @@
-﻿namespace Schiza.Model
+﻿namespace Schiza.Model.Settings
 {
     public class LocalConfig
     {

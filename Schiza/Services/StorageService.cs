@@ -1,5 +1,5 @@
 using System.Text;
-using Schiza.Model;
+using Schiza.Model.Settings;
 
 namespace Schiza.Services;
 

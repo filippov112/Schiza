@@ -1,4 +1,5 @@
-﻿using Schiza.Elements.Explorer.Components;
+﻿using Schiza.Windows.Project.Explorer;
+using Schiza.Windows.Project.Explorer.Components;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;

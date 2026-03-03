@@ -1,6 +1,6 @@
 ﻿using Schiza.Services;
 
-namespace Schiza.Model
+namespace Schiza.Model.Settings
 {
     public class GlobalConfig
     {

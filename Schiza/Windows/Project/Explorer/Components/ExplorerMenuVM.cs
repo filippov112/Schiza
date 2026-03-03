@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 
 
-namespace Schiza.Elements.Explorer.Components
+namespace Schiza.Windows.Project.Explorer.Components
 {
     public class ExplorerMenuVM : ViewModel
     {

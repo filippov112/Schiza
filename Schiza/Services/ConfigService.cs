@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
-using Schiza.Model;
+using Schiza.Model.Settings;
 
 namespace Schiza.Services
 {

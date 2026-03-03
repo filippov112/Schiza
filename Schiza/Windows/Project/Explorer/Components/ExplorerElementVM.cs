@@ -3,7 +3,7 @@ using System.IO;
 using Schiza.Other;
 using Schiza.Services;
 
-namespace Schiza.Elements.Explorer.Components
+namespace Schiza.Windows.Project.Explorer.Components
 {
     // Базовый класс для элементов дерева
     public class ExplorerElementVM : ViewModel
