@@ -1,10 +1,9 @@
-﻿using Schiza.Elements.Explorer;
+﻿using Schiza.Elements.Explorer.Components;
 using Schiza.Other;
-using Schiza.Windows.Project.Explorer.Components;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 
-namespace Schiza.Windows.Project.Explorer
+namespace Schiza.Elements.Explorer
 {
     public class ExplorerVM: ViewModel
     {

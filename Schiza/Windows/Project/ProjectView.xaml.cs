@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows;
 using DragEventArgs = System.Windows.DragEventArgs;
-using Schiza.Windows.Project.Explorer.Components;
+using Schiza.Elements.Explorer.Components;
 
 namespace Schiza.Windows.Project
 {

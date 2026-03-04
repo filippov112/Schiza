@@ -1,4 +1,4 @@
-﻿using Schiza.Model.Settings;
+﻿using Schiza.Model;
 using Schiza.Other;
 using Schiza.Services;
 

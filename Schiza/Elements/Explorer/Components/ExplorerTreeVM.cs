@@ -5,7 +5,7 @@ using System.Windows.Threading;
 using Schiza.Other;
 using Schiza.Services;
 
-namespace Schiza.Windows.Project.Explorer.Components
+namespace Schiza.Elements.Explorer.Components
 {
     public class ExplorerTreeVM : ViewModel
     {
@@ -216,26 +216,74 @@ namespace Schiza.Windows.Project.Explorer.Components
         }
 
         // Метод для перемещения элемента в файловой системе
-        public bool MoveItem(ExplorerElementVM element, ExplorerElementVM address)
+        public bool MoveItem(ExplorerElementVM itemToMove, ExplorerElementVM newParent)
         {
-            if (element == null || address == null || address.Type != ItemType.Folder)
+            if (itemToMove == null || newParent == null || newParent.Type != ItemType.Folder)
                 return false;
 
+            if (itemToMove.Parent == newParent)
+                return true; // Уже в нужной папке
 
-            string old_path = element.FullPath;
-            string new_path = Path.Combine(address.FullPath, element.Name);
+            string sourcePath = itemToMove.FullPath;
+            string destinationPath = Path.Combine(newParent.FullPath, itemToMove.Name);
 
-     
+            // нельзя перемещать элемент в самого себя
+            if (string.Equals(sourcePath, destinationPath, StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.WriteLine($"нельзя перемещать элемент в самого себя: source = `{sourcePath}`, dest = `{destinationPath}`");
+                return false;
+            }
 
-            
+            // нельзя перемещать родителя в его потомка
+            if (IsChildPath(sourcePath, destinationPath))
+            {
+                Debug.WriteLine($"нельзя перемещать родителя в его потомка: source = `{sourcePath}`, dest = `{destinationPath}`");
+                return false;
+            }
 
 
-            
+            // Проверка на существование файла/папки с таким именем в новом месте
+            if (File.Exists(destinationPath) || Directory.Exists(destinationPath))
+            {
+                MessageBox.Show($"Файл или папка с именем '{itemToMove.Name}' уже существует в папке '{newParent.Name}'.", "Ошибка перемещения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
 
-            
+            try
+            {
+                if (itemToMove.Type == ItemType.Folder)
+                {
+                    Directory.Move(sourcePath, destinationPath);
+                }
+                else
+                {
+                    File.Move(sourcePath, destinationPath);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при перемещении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
         }
 
-        
+        // Вспомогательный метод для проверки, является ли 'parent' родительским для 'child'
+        private bool IsChildPath(string parent, string child)
+        {
+            var parentInfo = new DirectoryInfo(parent);
+            var childInfo = new DirectoryInfo(child);
+
+            while (childInfo.Parent != null)
+            {
+                if (childInfo.Parent.FullName.Equals(parentInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                childInfo = childInfo.Parent;
+            }
+
+            return false;
+        }
 
     }
 }

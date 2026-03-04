@@ -1,6 +1,6 @@
 ﻿using Schiza.Other;
 
-namespace Schiza.Windows.Project.Explorer.Components
+namespace Schiza.Elements.Explorer.Components
 {
     public class ExplorerSearchVM : ViewModel
     {
